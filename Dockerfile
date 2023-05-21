@@ -34,3 +34,20 @@ RUN cmake\
 
 RUN make -j$(nproc) install
 RUN ldconfig
+
+WORKDIR /usr/src
+
+RUN git clone --depth 1 -b v6.2.2302 https://github.com/NGSolve/netgen netgen
+
+WORKDIR /usr/src/netgen/build
+
+RUN cmake -DCMAKE_BUILD_TYPE=Release\
+    -DINSTALL_DIR=/usr/local\
+    -DUSE_GUI=OFF\
+    -DUSE_PYTHON=OFF\
+    -DUSE_OCC=ON\
+    ..
+
+RUN make -j$(nproc)
+RUN make -j$(nproc) install
+RUN ldconfig
