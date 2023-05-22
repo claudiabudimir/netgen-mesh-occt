@@ -51,3 +51,17 @@ RUN cmake -DCMAKE_BUILD_TYPE=Release\
 RUN make -j$(nproc)
 RUN make -j$(nproc) install
 RUN ldconfig
+
+WORKDIR /usr/src
+
+COPY . /usr/src/executables
+
+WORKDIR /usr/src/executables/build
+RUN cmake /usr/src/executables
+RUN make
+
+RUN apt-get -y install time
+
+CMD ["time", "./mesh"]
+
+LABEL Name=meshing Version=0.0.1
